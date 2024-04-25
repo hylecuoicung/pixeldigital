@@ -1,22 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     let winnerAnnounced = false;  // Biến để kiểm tra liệu người thắng cuộc đã được công bố hay chưa
-    let horsesFinished = 0;  // Đếm số ngựa đã về đích
     let horses = [
-        {name:"Sếp", image: "thuy.png"},
-        {name:"Thợ Đụng", image: "huy.png"},
-        {name:"Nhật Tài", image: "tai.png"},
-        {name:"Cô Giáo Nga", image: "nga.png"},
-        {name:"Thị Hợp", image: "hop.png"},
-        {name:"Con Buôn", image: "duy anh.png"},
-        {name:"2 con Báo", image: "dog.png"},
+        {name: "Sếp", image: "thuy.png"},
+        {name: "Thợ Đụng", image: "huy.png"},
+        {name: "Nhật Tài", image: "tai.png"},
+        {name: "Cô Giáo Nga", image: "nga.png"},
+        {name: "Thị Hợp", image: "hop.png"},
+        {name: "Con Buôn", image: "duy anh.png"},
+        {name: "2 con Báo", image: "dog.png"}
     ];
 
     function startRace() {
         const raceTrack = document.getElementById('raceTrack');
         raceTrack.innerHTML = '';
         const raceTrackWidth = raceTrack.clientWidth - 100;
-        winnerAnnounced = false;
-        horsesFinished = 0;  // Reset khi bắt đầu cuộc đua
+        winnerAnnounced = false; // Reset lại trạng thái người thắng cuộc
 
         horses.forEach((horse, index) => {
             const horseImg = document.createElement('img');
@@ -38,16 +36,19 @@ document.addEventListener('DOMContentLoaded', function() {
             horseImg.style.transform = `translateX(${position}px)`;
             if (position >= finishLine) {
                 clearInterval(interval);
-                horsesFinished++;
                 if (!winnerAnnounced) {
                     announceWinner(name, horseImg.src);
                     winnerAnnounced = true;
-                }
-                if (horsesFinished === horses.length) { // Kiểm tra xem tất cả ngựa đã về đích chưa
-                    finishRace(); // Kết thúc cuộc đua khi tất cả các ngựa đã về đích
+                    stopAllHorses();
                 }
             }
         }, 100);
+    }
+
+    function stopAllHorses() {
+        document.querySelectorAll('.horse').forEach(horse => {
+            clearInterval(horse.interval);
+        });
     }
 
     function announceWinner(name, src) {
@@ -60,10 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         winnerName.textContent = `Ngựa chiến thắng: ${name}`;
         winnerModal.style.display = 'block';
         restartButton.style.display = 'inline-block';
-    }
-
-    function finishRace() {
-        // Tùy chỉnh thêm ở đây nếu cần
     }
 
     window.startRace = startRace; // Make startRace globally available
